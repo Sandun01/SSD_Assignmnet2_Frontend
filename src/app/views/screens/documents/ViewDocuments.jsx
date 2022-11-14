@@ -34,7 +34,7 @@ const ViewDocuments = () => {
         var config = {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
-                'content-type': 'multipart/form-data',
+               'content-type': 'application/json',
             },
         }
 

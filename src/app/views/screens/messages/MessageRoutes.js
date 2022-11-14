@@ -5,17 +5,17 @@ const messageRoutes = [
     {
         path: '/messages/new',
         component: React.lazy(() => import('../messages/NewMessage')),
-        auth: authRoles.manager,
+        auth: authRoles.worker,
     },
     {
         path: '/messages/received/all',
         component: React.lazy(() => import('../messages/ReceivedMessages')),
-        auth: authRoles.manager,
+        auth: authRoles.worker,
     },
     {
         path: '/messages/sent/all',
         component: React.lazy(() => import('../messages/SentMessages')),
-        auth: authRoles.manager,
+        auth: authRoles.worker,
     },
 ]
 
