@@ -36,7 +36,6 @@ const Sidenav = ({ children }) => {
     let nav = []
 
     const getFilteredNav = (navList = [], role) => {
-        console.log(navList);
         return navList.reduce((array, nav) => {
             // console.log(nav.auth);
 

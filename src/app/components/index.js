@@ -18,3 +18,4 @@ export { default as MatxProgressBar } from './MatxProgressBar/MatxProgressBar'
 export { default as SimpleCard } from './cards/SimpleCard'
 
 export { default as TMFLogo } from './TMFLogo/TMFLogo'
+export { default as LoadingDialog } from './LoadingDialog/LoadingDialog'

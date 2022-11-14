@@ -1,15 +1,27 @@
 import React, { useState } from 'react'
-import { Grid, Button, Snackbar } from '@material-ui/core'
+import {
+    Grid,
+    Button,
+    Snackbar,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+} from '@material-ui/core'
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
-
-import { MatxLoading, SimpleCard } from 'app/components'
+import { LoadingDialog, SimpleCard } from 'app/components'
 import { Alert, Autocomplete } from '@material-ui/lab'
 import { documentTypes } from 'app/AppConst'
+import useAuth from 'app/hooks/useAuth'
+
 import axios from 'axios'
+import { BACKEND_API_ENDPOINT } from 'app/views/utilities/ApiRoutes'
 
 const SaveDocument = () => {
+    const { user } = useAuth()
     const [loading, setLoading] = useState(false)
     const [formKey, setFormKey] = useState(false)
+    const [serverVerifyDialog, setServerVerifyDialog] = useState(false)
 
     //data
     const [documentInfo, setDocumentInfo] = useState({})
@@ -23,43 +35,36 @@ const SaveDocument = () => {
     const handleChange = (e) => {
         var name = e.target.name
         var value = e.target.value
-        console.log(e)
+        // console.log(e)
         let temp = { ...documentInfo }
         temp[name] = value
         setDocumentInfo(temp)
-        console.log(documentInfo)
+        // console.log(documentInfo)
     }
 
-    const handleFormSubmit = async (e) => {
+    const verifyServerBeforeUpload = async () => {
         setLoading(true)
-        console.log('state data: ', documentInfo)
-
+        const accessToken = window.localStorage.getItem('accessToken')
         var messageRes = null
         var variantRes = null
-        var fileUrl = ''
-        var form_data = documentInfo
-
-        var data = new FormData()
-        data.append('attachment', attachmentData[0])
-
         await axios
-            .post('http://localhost:5000/api/files/uploadFile', data)
+            .get(BACKEND_API_ENDPOINT + 'users/token/' + accessToken)
             .then((res) => {
-                if (res.status == 200) {
-                    console.log(res)
-                    fileUrl = res.data.path.replace(/\\/g, '/')
-                    messageRes = 'File Upload Success'
+                if (res.status == 200 && res.data.success) {
                     variantRes = 'success'
-                    form_data['attachment'] = fileUrl
-
-                    updateDatabaseData(form_data)
+                    messageRes = 'Verification Success!'
+                    handleSnackbar(true)
+                    handleSnackbarSeverity(variantRes)
+                    handleSnackbarMessage(messageRes)
+                    handleFormSubmit()
+                    setServerVerifyDialog(false)
                 } else {
                     variantRes = 'error'
                     handleSnackbar(true)
                     handleSnackbarSeverity(variantRes)
-                    handleSnackbarMessage('Error Uploading File!')
-                    setFormKey(!formKey)
+                    handleSnackbarMessage('Error Verifying!')
                     setLoading(false)
+                    setServerVerifyDialog(false)
                 }
             })
             .catch((error) => {
@@ -69,54 +74,72 @@ const SaveDocument = () => {
                 handleSnackbar(true)
                 handleSnackbarSeverity(variantRes)
                 handleSnackbarMessage('Error:' + messageRes)
-                setFormKey(!formKey)
                 setLoading(false)
+                setServerVerifyDialog(false)
             })
     }
 
-    const updateDatabaseData = async (formData) => {
-        var messageRes = null
-        var variantRes = null
+    const handleFormSubmit = async () => {
+        if (attachmentData.length > 0) {
+            var messageRes = null
+            var variantRes = null
+            var form_data = documentInfo
 
-        var formFinalData = {
-            name: formData.documentName,
-            type: formData.documentType,
-            url: formData.attachment,
-        }
-        console.log('formFinalData:', formFinalData)
+            var data = new FormData()
+            data.append('attachment', attachmentData[0])
+            data.append('uploadedBy', user._id)
+            data.append('name', form_data.documentName)
+            data.append('type', form_data.documentType)
 
-        await axios
-            .post('http://localhost:5000/api/documents', formFinalData)
-            .then((res) => {
-                if (res.status == 201) {
-                    console.log(res)
-                    handleSnackbar(true)
-                    handleSnackbarSeverity('success')
-                    handleSnackbarMessage('Data save success!')
-                    setFormKey(!formKey)
-                    setTimeout(() => {
+            //token
+            const accessToken = window.localStorage.getItem('accessToken')
+            var config = {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'content-type': 'multipart/form-data',
+                },
+            }
+
+            await axios
+                .post(BACKEND_API_ENDPOINT + 'documents', data, config)
+                .then((res) => {
+                    if (res.status == 201) {
+                        // console.log(res)
+                        messageRes = 'File Upload Success'
+                        variantRes = 'success'
+
+                        handleSnackbar(true)
+                        handleSnackbarSeverity(variantRes)
+                        handleSnackbarMessage(messageRes)
+                        setDocumentInfo({})
+                        setAttachmentData([])
+                        setFormKey(!formKey)
                         setLoading(false)
-                        window.location.reload(false)
-                    }, 2000)
-                } else {
+                    } else {
+                        variantRes = 'error'
+                        handleSnackbar(true)
+                        handleSnackbarSeverity(variantRes)
+                        handleSnackbarMessage('Error Uploading File!')
+                        setFormKey(!formKey)
+                        setLoading(false)
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                    messageRes = error.message
                     variantRes = 'error'
                     handleSnackbar(true)
                     handleSnackbarSeverity(variantRes)
-                    handleSnackbarMessage('Error Data Saving!')
+                    handleSnackbarMessage('Error:' + messageRes)
                     setFormKey(!formKey)
                     setLoading(false)
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-                messageRes = error.message
-                variantRes = 'error'
-                handleSnackbar(true)
-                handleSnackbarSeverity(variantRes)
-                handleSnackbarMessage('Error:' + messageRes)
-                setFormKey(!formKey)
-                setLoading(false)
-            })
+                })
+        } else {
+            handleSnackbar(true)
+            handleSnackbarSeverity('error')
+            handleSnackbarMessage('Error: Please Upload and Document!')
+            setLoading(false)
+        }
     }
 
     const handleFileUpload = (event) => {
@@ -151,14 +174,10 @@ const SaveDocument = () => {
     }
 
     return (
-        <div
-        // style={{
-        //     backgroundImage: `url("/assets/images/login_background.jpg")`,
-        // }}
-        >
+        <div>
             <SimpleCard title="Add New Document">
                 {/* loader */}
-                {loading && <MatxLoading />}
+                {loading && <LoadingDialog />}
 
                 {/* Form */}
                 <Grid container>
@@ -174,7 +193,7 @@ const SaveDocument = () => {
                     <Grid item lg={7} md={7} sm={7} xs={12}>
                         <div className="p-8 h-full bg-light-gray relative">
                             <ValidatorForm
-                                onSubmit={handleFormSubmit}
+                                onSubmit={() => setServerVerifyDialog(true)}
                                 key={formKey}
                             >
                                 <TextValidator
@@ -262,6 +281,32 @@ const SaveDocument = () => {
                     {snackbarMessage}
                 </Alert>
             </Snackbar>
+
+            <Dialog open={serverVerifyDialog}>
+                <DialogTitle>Verify Server Before Upload</DialogTitle>
+                <DialogContent>
+                    Please click this button to verify your identity with the
+                    server identity.
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={verifyServerBeforeUpload}
+                        color="primary"
+                        autoFocus
+                    >
+                        Verify Server
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            setServerVerifyDialog(false)
+                        }}
+                        color="primary"
+                        autoFocus
+                    >
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }

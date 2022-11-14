@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }) => {
             if (response.status == 200) {
                 const accessToken = response.data.token
                 const user = {
-                    id: response.data.id,
+                    _id: response.data._id,
                     name: response.data.name,
                     type: response.data.type,
                     email: response.data.email,

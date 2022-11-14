@@ -13,22 +13,11 @@ import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
 import { makeStyles } from '@material-ui/core/styles'
 import { Alert, Autocomplete } from '@material-ui/lab'
 import { SimpleCard } from 'app/components'
-
-import CustomLoader from 'app/components/CustomLoader/CustomLoader'
-
-const useStyles = makeStyles(({ palette, ...theme }) => ({
-    buttonProgress: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        marginTop: -12,
-        marginLeft: -12,
-    },
-}))
+import { CircularProgress } from '@material-ui/core'
+import { BACKEND_API_ENDPOINT } from 'app/views/utilities/ApiRoutes'
 
 const ViewDocuments = () => {
     const [loading, setLoading] = useState(true)
-    const [loadingBtn, setLoadingBtn] = useState(false)
     const [searchValue, setSearchValue] = useState('')
 
     //data setup
@@ -40,12 +29,21 @@ const ViewDocuments = () => {
     const [snackbarMessage, handleSnackbarMessage] = useState('')
 
     const loadData = async () => {
+        //token
+        const accessToken = window.localStorage.getItem('accessToken')
+        var config = {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'content-type': 'multipart/form-data',
+            },
+        }
+
         await axios
-            .get('http://localhost:5000/api/documents')
+            .get(BACKEND_API_ENDPOINT + 'documents', config)
             .then((res) => {
-                console.log(res)
-                if (res.data.success) {
-                    setAllDocuments(res.data.documents)
+                // console.log(res)
+                if (res.data && res.data.length > 0) {
+                    setAllDocuments(res.data)
                     setLoading(false)
                 } else {
                     handleSnackbar(true)
@@ -65,6 +63,18 @@ const ViewDocuments = () => {
         var value = e.target.value
         setSearchValue(value)
         // console.log(searchValue)
+    }
+
+    const viewUploadedDocument = async (id) => {
+        //token
+        const accessToken = window.localStorage.getItem('accessToken')
+        window.open(
+            BACKEND_API_ENDPOINT +
+                'documents/download/' +
+                id +
+                `/${accessToken}`,
+            '_blank'
+        )
     }
 
     useEffect(() => {
@@ -104,7 +114,9 @@ const ViewDocuments = () => {
                 </Grid>
 
                 {loading ? (
-                    <CustomLoader />
+                    <div style={{ textAlign: 'center' }}>
+                        <CircularProgress />
+                    </div>
                 ) : (
                     // cards
                     <Grid container>
@@ -142,6 +154,10 @@ const ViewDocuments = () => {
                                                     <b>Document</b>
                                                 </Typography>
                                                 <Typography>
+                                                    <b>Uploaded By: </b>
+                                                    {itm.uploadedBy.name}
+                                                </Typography>
+                                                <Typography>
                                                     <b>Document Name: </b>
                                                     {itm.name}
                                                 </Typography>
@@ -158,13 +174,11 @@ const ViewDocuments = () => {
                                                 size="small"
                                                 style={{ color: 'white' }}
                                                 // onClick={() => console.log('View')}
-                                                onClick={() => {
-                                                    window.open(
-                                                        'http://localhost:5000/' +
-                                                            itm.url,
-                                                        '_blank'
+                                                onClick={() =>
+                                                    viewUploadedDocument(
+                                                        itm._id
                                                     )
-                                                }}
+                                                }
                                             >
                                                 Download Document
                                             </Button>
