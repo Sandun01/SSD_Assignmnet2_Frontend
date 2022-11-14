@@ -26,7 +26,7 @@ const useStyles = makeStyles(({ palette, ...theme }) => ({
     },
 }))
 
-const ViewAllBanks = () => {
+const ViewDocuments = () => {
     const [loading, setLoading] = useState(true)
     const [loadingBtn, setLoadingBtn] = useState(false)
     const [searchValue, setSearchValue] = useState('')
@@ -192,4 +192,4 @@ const ViewAllBanks = () => {
     )
 }
 
-export default ViewAllBanks
+export default ViewDocuments

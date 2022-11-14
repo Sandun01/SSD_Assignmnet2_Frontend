@@ -2,7 +2,9 @@ import React from 'react'
 import { Redirect } from 'react-router-dom'
 
 import dashboardRoutes from './views/dashboard/DashboardRoutes'
-import bankRoutes from './views/screens/bank/BankRoutes'
+import documentRoutes from './views/screens/documents/DocumentRoutes'
+import messageRoutes from './views/screens/messages/MessageRoutes'
+import userRoutes from './views/screens/users/UserRoutes'
 
 const redirectRoute = [
     {
@@ -20,7 +22,9 @@ const errorRoute = [
 
 const routes = [
     ...dashboardRoutes,
-    ...bankRoutes,
+    ...documentRoutes,
+    ...messageRoutes,
+    ...userRoutes,
     ...redirectRoute,
     ...errorRoute,
 ]

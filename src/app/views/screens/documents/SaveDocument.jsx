@@ -7,7 +7,7 @@ import { Alert, Autocomplete } from '@material-ui/lab'
 import { documentTypes } from 'app/AppConst'
 import axios from 'axios'
 
-const AddNewDocument = () => {
+const SaveDocument = () => {
     const [loading, setLoading] = useState(false)
     const [formKey, setFormKey] = useState(false)
 
@@ -266,4 +266,4 @@ const AddNewDocument = () => {
     )
 }
 
-export default AddNewDocument
+export default SaveDocument

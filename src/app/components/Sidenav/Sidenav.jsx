@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import Scrollbar from 'react-perfect-scrollbar'
-import { navigations } from 'app/navigations'
+import { navigation } from 'app/navigation'
 import { MatxVerticalNav } from 'app/components'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
@@ -36,6 +36,7 @@ const Sidenav = ({ children }) => {
     let nav = []
 
     const getFilteredNav = (navList = [], role) => {
+        console.log(navList);
         return navList.reduce((array, nav) => {
             // console.log(nav.auth);
 
@@ -43,7 +44,7 @@ const Sidenav = ({ children }) => {
                 //authenticated parent node routes
                 if (nav.auth.includes(role)) {
                     //authenticated children node routes
-                    if (nav.children) {
+                    if (nav.children && nav.children.length > 0) {
                         var arr = nav.children
                         var new_arr = []
 
@@ -70,7 +71,7 @@ const Sidenav = ({ children }) => {
     }
 
     const createUserSideBarFilter = () => {
-        let filteredNav = getFilteredNav(navigations, user.type)
+        let filteredNav = getFilteredNav(navigation, user.type)
         nav = filteredNav
         // console.log("--", filteredNav)
     }
