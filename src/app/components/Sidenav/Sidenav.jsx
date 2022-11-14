@@ -5,6 +5,7 @@ import { MatxVerticalNav } from 'app/components'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import useSettings from 'app/hooks/useSettings'
+import useAuth from 'app/hooks/useAuth'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
     scrollable: {
@@ -30,6 +31,52 @@ const Sidenav = ({ children }) => {
     const classes = useStyles()
     const { settings, updateSettings } = useSettings()
 
+    const { user } = useAuth()
+
+    let nav = []
+
+    const getFilteredNav = (navList = [], role) => {
+        return navList.reduce((array, nav) => {
+            // console.log(nav.auth);
+
+            if (nav.auth) {
+                //authenticated parent node routes
+                if (nav.auth.includes(role)) {
+                    //authenticated children node routes
+                    if (nav.children) {
+                        var arr = nav.children
+                        var new_arr = []
+
+                        //auth children
+                        arr.forEach((navItem) => {
+                            if (navItem.auth.includes(role)) {
+                                new_arr.push(navItem)
+                                // console.log(navItem);
+                            }
+                        })
+
+                        //add authorized children to parent
+                        nav.children = new_arr
+                        array.push(nav)
+                    } else {
+                        //root node not have children
+                        array.push(nav)
+                    }
+                }
+            }
+
+            return array
+        }, [])
+    }
+
+    const createUserSideBarFilter = () => {
+        let filteredNav = getFilteredNav(navigations, user.type)
+        nav = filteredNav
+        // console.log("--", filteredNav)
+    }
+
+    createUserSideBarFilter()
+
     const updateSidebarMode = (sidebarSettings) => {
         let activeLayoutSettingsName = settings.activeLayout + 'Settings'
         let activeLayoutSettings = settings[activeLayoutSettingsName]
@@ -53,7 +100,7 @@ const Sidenav = ({ children }) => {
                 className={clsx('relative px-4', classes.scrollable)}
             >
                 {children}
-                <MatxVerticalNav items={navigations} />
+                <MatxVerticalNav items={nav} />
             </Scrollbar>
 
             <div
