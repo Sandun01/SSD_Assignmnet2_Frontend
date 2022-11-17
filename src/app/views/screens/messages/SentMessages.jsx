@@ -73,7 +73,7 @@ const SentMessages = () => {
                     // cards
                     <Grid container>
                         {allMessages.map((msg, key) => (
-                            <Grid item lg={4} md={4} sm={6} xs={12} key={key}>
+                            <Grid item lg={6} md={6} sm={6} xs={12} key={key}>
                                 <Card
                                     elevation={5}
                                     className="p-3 m-3 hover-bg-secondary"

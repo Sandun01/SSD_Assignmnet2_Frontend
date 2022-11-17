@@ -90,7 +90,7 @@ const ReceivedMessages = () => {
                     // cards
                     <Grid container>
                         {allMessages.map((msg, key) => (
-                            <Grid item lg={4} md={4} sm={6} xs={12} key={key}>
+                            <Grid item lg={6} md={6} sm={6} xs={12} key={key}>
                                 <Card
                                     elevation={5}
                                     className="p-3 m-3 hover-bg-green"
@@ -104,8 +104,8 @@ const ReceivedMessages = () => {
                                                 <b>Message</b>
                                             </Typography>
                                             <Typography>
-                                                <b>To : </b>
-                                                {msg.receiver.name}
+                                                <b>From : </b>
+                                                {msg.sender.name}
                                             </Typography>
                                             <Typography className="mt-2">
                                                 <b>Message : </b>

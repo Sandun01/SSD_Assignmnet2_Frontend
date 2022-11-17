@@ -1,12 +1,7 @@
 import React, { Fragment } from 'react'
-import { Grid, Card } from '@material-ui/core'
-import DoughnutChart from './shared/Doughnut'
-import StatCards from './shared/StatCards'
-import TopSellingTable from './shared/TopSellingTable'
-import RowCards from './shared/RowCards'
-import StatCards2 from './shared/StatCards2'
-import Campaigns from './shared/Campaigns'
+import { Grid, Typography } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
+import { SimpleCard } from 'app/components'
 
 const Analytics = () => {
     const theme = useTheme()
@@ -14,39 +9,52 @@ const Analytics = () => {
     return (
         <Fragment>
             <div className="analytics m-sm-30 mt-6">
-                <Grid container spacing={3}>
-                    <Grid item lg={8} md={8} sm={12} xs={12}>
-                        <StatCards />
-
-                        {/* Top Selling Products */}
-                        <TopSellingTable />
-
-                        <StatCards2 />
-
-                        <h4 className="card-title text-muted mb-4">
-                            Ongoing Projects
-                        </h4>
-                        <RowCards />
+                <SimpleCard>
+                    <Grid container spacing={3}>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Typography variant="h4">
+                                Welcome to ABC Company
+                            </Typography>
+                        </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Typography variant="h6">
+                                ABC Messaging Service - ABC Messenger
+                            </Typography>
+                        </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Typography variant="p">
+                                Simple. Secure. Reliable messaging. With ABC
+                                Messenger, you'll get fast, simple, secure
+                                messaging and calling for free*, available on
+                                phones all over the world.
+                            </Typography>
+                            <Typography variant="p">
+                                Some of your most personal moments are shared on
+                                ABC Messenger, which is why we built end-to-end
+                                encryption into the latest versions of our app.
+                                When end-to-end encrypted, your messages and
+                                calls are secured so only you and the person
+                                you're communicating with can read or listen to
+                                them, and nobody in between, not even ABC
+                                Messenger.
+                            </Typography>
+                        </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Typography variant="h6">
+                                ABC File Sharing Service - ABC Messenger
+                            </Typography>
+                        </Grid>
+                        <Grid item lg={12} md={12} sm={12} xs={12}>
+                            <Typography variant="p">
+                                Send PDFs, documents, spreadsheets, slideshows
+                                and more, without the hassle of email or file
+                                sharing apps. You can send documents up to 100
+                                MB, so it's easy to get what you need over to
+                                who you want.
+                            </Typography>
+                        </Grid>
                     </Grid>
-
-                    <Grid item lg={4} md={4} sm={12} xs={12}>
-                        <Card className="px-6 py-4 mb-6">
-                            <div className="card-title">Traffic Sources</div>
-                            <div className="card-subtitle">Last 30 days</div>
-                            <DoughnutChart
-                                height="300px"
-                                color={[
-                                    theme.palette.primary.dark,
-                                    theme.palette.primary.main,
-                                    theme.palette.primary.light,
-                                ]}
-                            />
-                        </Card>
-
-
-                        <Campaigns />
-                    </Grid>
-                </Grid>
+                </SimpleCard>
             </div>
         </Fragment>
     )
