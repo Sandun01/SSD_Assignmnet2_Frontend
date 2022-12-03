@@ -1,24 +1,44 @@
-<h2 id="availablescripts">Getting started</h2>
+ 
 
-<p>In the project directory, you can run:</p>
+Group ID - 2022S2_REG_WE_69 
+-------------------------------------------------
+Project Name - ABC Company Admin/ Document Management and Messaging Platform
+-------------------------------------------------
+Group Details
+--------------------------------------------------
+Member Details:-
 
-<h3 id="npmstart"><code>npm start</code></h3>
+| Name  | Student ID | Username|
+| ------------- | ------------- | -------------|
+| R.Y Senevirathne  | IT19216874 | rasitha11 |
+| M.A.A.H Rathnayake | IT19217796   | drex7001 |
+| S.L Abeygunawardana | IT19362854   | Sandun01 |
+| A.D.R.P Athukorala | IT14113246 | rashini123 |
 
-<p>Runs the app in the development mode.<br>
-Open <a href="http://localhost:3000">http://localhost:3000</a> to view it in the browser.</p>
+Project Description
+------------------------------------------------------
+In this assignment, a web application was developed for ABC company that allows its staff to 
+save messages and upload files. The client app acts as a simple interface for login and providing 
+messages or files it runs over an insecure network. The server app acts as a data repository, and 
+it stores the uploaded messages and files by the client app. There are 3 main user roles in this 
+system such as administrator, worker, and manager. 
 
-<p>The page will reload if you make edits.<br>
-You will also see any lint errors in the console.</p>
+- The administrator can create accounts for the staff. 
+- Workers can only save messages.
+- Managers can save messages and upload files.
 
-<h3 id="npmrunbuild"><code>npm run build</code></h3>
+In order to ensure the security of this web application, the below security requirements were 
+considered.
+- Confidentiality
+- Integrity
+- Message authentication
+- Server identification
 
-<p>Builds the app for production to the <code>build</code> folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.</p>
+<br>
+<a href="https://github.com/Sandun01/SSD_Assignmnet2_Frontend/blob/dev/Group2022_Regular_69.pdf">
+More About The Project ...
+</a>
+<br>
+--------------------------------------------------------------------------------------------------------------
 
-<p>The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!</p>
-
-<h3>Download</h3>
-Download From <a href="https://ui-lib.com/downloads/matx-react-dashboard/">official website</a>
-
-<h3>For questions and support mail us at <a href="mailto:support@ui-lib.com">support@ui-lib.com</a></h3>
+<img src="https://devops.com/wp-content/uploads/2020/11/Software-Safety-vs.-Security-What_s-the-Difference-1280x720.jpg" >
